@@ -28,7 +28,7 @@
           <html>
             <body style="background-color:powderblue;">
               <center>
-                <h1>First Time Ansible</h1>
+                <h1>First Time Ansible - Dynamic Inventory</h1>
               </center>
             </body>
           </html>
