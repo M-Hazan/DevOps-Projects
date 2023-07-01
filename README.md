@@ -1,2 +1,1 @@
-# Terraform
-Repo of Terraform projects
+# Path to DevOps - Studies & Projects
