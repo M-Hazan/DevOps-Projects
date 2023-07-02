@@ -1,0 +1,36 @@
+---
+- hosts: all
+  become: yes
+  tasks:        
+    - name: Update APT cache
+      yum:
+        update_cache: yes
+
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx service
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Remove default nginx index.html
+      file:
+        path: /usr/share/nginx/html/index.html
+        state: absent
+
+    - name: Copy index.html to server
+      copy:
+        content: |
+          <html>
+            <body style="background-color:powderblue;">
+              <center>
+                <h1>First Pipeline ever!</h1>
+              </center>
+            </body>
+          </html>
+        dest: /usr/share/nginx/html/index.html
+
