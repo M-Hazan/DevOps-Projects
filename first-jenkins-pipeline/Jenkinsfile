@@ -1,38 +1,24 @@
 pipeline {
     agent any 
 
-	stage('Checkout') {
-	    steps {
-		git branch: 'main',
-		    url: 'https://github.com/M-Hazan/DevOps-Projects.git'
-	    }
-	}
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/M-Hazan/DevOps-Projects.git'
+            }
+        }
 
-
-        stage('Change to Directory') {
+        stage('Change to Directory and Run Scripts') {
             steps {
                 dir('first-jenkins-pipeline') {
                     echo 'Now in first-jenkins-pipeline directory'
-                }
-            }
-        }
-
-        stage('Terraform Init and Apply') {
-            steps {
-                dir('first-jenkins-pipeline') {
                     sh 'terraform init'
                     sh 'terraform apply -auto-approve'
-                }
-            }
-        }
-
-        stage('Run Ansible') {
-            steps {
-                dir('first-jenkins-pipeline') {
                     sh 'ansible-playbook -i inventory.ini website.yml'
                 }
             }
         }
     }
-
+}
 
