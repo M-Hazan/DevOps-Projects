@@ -1,5 +1,9 @@
 pipeline {
-    agent any 
+    agent any
+
+    parameters {
+        booleanParam(name: 'destroy', defaultValue: false, description: 'Destroy infrastructure')
+    }
 
     stages {
         stage('Clone Repository') {
@@ -17,7 +21,11 @@ pipeline {
                     dir('first-jenkins-pipeline') {
                         echo 'Now in first-jenkins-pipeline directory'
                         sh 'terraform init'
-                        sh 'terraform apply -auto-approve'
+                        if (params.destroy) {
+                            sh 'terraform destroy -auto-approve'
+                        } else {
+                            sh 'terraform apply -auto-approve'
+                        }
                     }
                 }
             }
