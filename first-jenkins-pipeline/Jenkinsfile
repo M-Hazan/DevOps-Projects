@@ -14,17 +14,19 @@ pipeline {
 
         stage('Terraform') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
-                ]) {
-                    dir('first-jenkins-pipeline') {
-                        echo 'Now in first-jenkins-pipeline directory'
-                        sh 'terraform init'
-                        if (params.destroy == true) {
-                            sh 'terraform destroy -auto-approve'
-                        } else {
-                            sh 'terraform apply -auto-approve'
+                script {
+                    withCredentials([
+                        string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                        string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                    ]) {
+                        dir('first-jenkins-pipeline') {
+                            echo 'Now in first-jenkins-pipeline directory'
+                            sh 'terraform init'
+                            if (params.destroy == true) {
+                                sh 'terraform destroy -auto-approve'
+                            } else {
+                                sh 'terraform apply -auto-approve'
+                            }
                         }
                     }
                 }
