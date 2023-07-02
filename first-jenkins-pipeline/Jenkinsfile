@@ -2,19 +2,30 @@ pipeline {
     agent any 
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/M-Hazan/DevOps-Projects.git'
+                git branch: 'main', url: 'https://github.com/M-Hazan/DevOps-Projects.git'
             }
         }
 
-        stage('Change to Directory and Run Scripts') {
+        stage('Terraform') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    dir('first-jenkins-pipeline') {
+                        echo 'Now in first-jenkins-pipeline directory'
+                        sh 'terraform init'
+                        sh 'terraform apply -auto-approve'
+                    }
+                }
+            }
+        }
+
+        stage('Ansible') {
             steps {
                 dir('first-jenkins-pipeline') {
-                    echo 'Now in first-jenkins-pipeline directory'
-                    sh 'terraform init'
-                    sh 'terraform apply -auto-approve'
                     sh 'ansible-playbook -i inventory.ini website.yml'
                 }
             }
