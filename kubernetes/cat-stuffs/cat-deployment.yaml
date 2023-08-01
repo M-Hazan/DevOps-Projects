@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  cat-deployment
+  labels:
+    type: deployment
+    app: cat-app
+spec:
+  selector:
+    matchLabels:
+      app: cat-app-pod
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app:  cat-app-pod
+    spec:
+      containers:
+      - name:  cat-container
+        image:  acantril/containerofcats
+        ports:
+        - containerPort:  80
